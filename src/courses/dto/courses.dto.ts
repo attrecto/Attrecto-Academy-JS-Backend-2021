@@ -1,7 +1,16 @@
+import { IsString, IsUrl } from 'class-validator';
 export class CourseDto {
-    id: number;
-    title: string;
-    description: string;
-    author: string;
-    url: string;
+  id: number;
+
+  @IsString()
+  title: string;
+
+  @IsString()
+  description: string;
+
+  @IsString()
+  author: string;
+
+  @IsUrl()
+  url: string;
 }
