@@ -2,10 +2,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { hash } from 'bcrypt';
 
 import { UserEntity } from '../database/entity/user.entity';
 import { DatabaseError } from '../common/database-error';
-import { UserDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -14,8 +15,9 @@ export class UsersService {
     private readonly usersRepository: Repository<UserEntity>,
   ) {}
 
-  async create(data: UserDto) {
+  async create(data: CreateUserDto) {
     try {
+      data.password = await hash(data.password, 10);
       const user = await this.usersRepository.save(data);
 
       return this.findOne(user.id);
@@ -36,23 +38,28 @@ export class UsersService {
     return this.usersRepository.findOne(id);
   }
 
-  async update(id: number, data: UserDto) {
-    try {
-      data.id = id;
+  async update(id: number, data: UpdateUserDto) {
+    data.id = id;
 
-      const user = await this.usersRepository.save(data);
+    const user = await this.usersRepository.save(data);
 
-      return this.findOne(user.id);
-    } catch (e) {
-      if (e.errno === DatabaseError.CONSTRAINT) {
-        throw new BadRequestException('User already exists!');
-      }
-
-      throw e;
-    }
+    return this.findOne(user.id);
   }
 
   async remove(id: number) {
     await this.usersRepository.delete(id);
+  }
+
+  async findPasswordByEmail(email: string) {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+      select: ['password'],
+    });
+
+    return user?.password;
+  }
+
+  async findUserByEmail(email: string) {
+    return this.usersRepository.findOne({ email });
   }
 }

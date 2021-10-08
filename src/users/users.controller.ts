@@ -6,27 +6,31 @@ import {
   Delete,
   NotFoundException,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
-import { UserDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { Id } from '../common/id.decorator';
+import { TokenGuard } from 'src/auth/guards/token.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() data: UserDto) {
+  async create(@Body() data: CreateUserDto) {
     return this.usersService.create(data);
   }
 
   @Get()
+  @UseGuards(TokenGuard)
   async findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(TokenGuard)
   async findOne(@Id() id: number) {
     const user = await this.usersService.findOne(id);
 
@@ -38,7 +42,8 @@ export class UsersController {
   }
 
   @Put(':id')
-  async update(@Id() id: number, @Body() data: UserDto) {
+  @UseGuards(TokenGuard)
+  async update(@Id() id: number, @Body() data: UpdateUserDto) {
     const user = await this.usersService.findOne(id);
 
     if (!user) {
@@ -49,6 +54,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(TokenGuard)
   async remove(@Id() id: number) {
     const user = await this.usersService.findOne(id);
 
