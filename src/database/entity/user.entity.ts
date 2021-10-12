@@ -1,4 +1,5 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CourseEntity } from './course.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -14,4 +15,16 @@ export class UserEntity {
 
   @Column({ name: 'password', type: 'varchar', select: false })
   password: string;
+
+  @OneToOne(() => CourseEntity, {cascade: true})
+  course: CourseEntity
+
+  @ManyToMany(() => CourseEntity)
+  @JoinTable({
+      name: 'course_users',
+      joinColumns: [{ name: 'user_id' }],
+      inverseJoinColumns: [{ name: 'course_id' }],
+  })
+  courses: CourseEntity[];
+
 }

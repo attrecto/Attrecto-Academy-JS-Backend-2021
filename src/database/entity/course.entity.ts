@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { type } from 'os';
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from './user.entity';
 
 @Entity({ name: 'course' })
 export class CourseEntity {
@@ -11,9 +13,19 @@ export class CourseEntity {
   @Column({ name: 'description', type: 'varchar' })
   description: string;
 
-  @Column({ name: 'author', type: 'varchar' })
-  author: string;
+  @OneToOne(() => UserEntity)
+  @JoinColumn()
+  author: UserEntity;
 
   @Column({ name: 'url', type: 'varchar' })
   url: string;
+
+  @ManyToMany(() => UserEntity)
+  @JoinTable({
+      name: 'course_users',
+      joinColumns: [{ name: 'course_id' }],
+      inverseJoinColumns: [{ name: 'user_id' }],
+  })
+  students: UserEntity[];
+
 }

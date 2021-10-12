@@ -16,7 +16,9 @@ import { TokenGuard } from 'src/auth/guards/token.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService
+    ) {}
 
   @Post()
   async create(@Body() data: CreateUserDto) {

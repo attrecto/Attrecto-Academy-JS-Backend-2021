@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 
 import { CourseEntity } from '../database/entity/course.entity';
@@ -10,23 +11,25 @@ export class CoursesService {
   constructor(
     @InjectRepository(CourseEntity)
     private readonly coursesRepository: Repository<CourseEntity>,
+    private readonly userService: UsersService,
   ) {}
 
   getAll() {
-    return this.coursesRepository.find();
+    return this.coursesRepository.find({ relations: ["author", "students"] });
   }
 
   getOne(id: number) {
-    return this.coursesRepository.findOne(id);
+    return this.coursesRepository.findOne(id, { relations: ["author", "students"] });
   }
 
-  create(course: CourseDto) {
+  async create(course: CourseDto) {
+    console.log(course);
     return this.coursesRepository.save(course);
   }
 
   modify(id: number, course: CourseDto) {
     course.id = id;
-
+    console.log(course);
     return this.coursesRepository.save(course);
   }
 

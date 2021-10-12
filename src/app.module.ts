@@ -5,6 +5,8 @@ import * as path from 'path';
 import { CoursesModule } from './courses/courses.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { validate } from './config/config.service';
 
 @Module({
   imports: [
@@ -18,6 +20,12 @@ import { AuthModule } from './auth/auth.module';
     CoursesModule,
     UsersModule,
     AuthModule,
+    ConfigModule.forRoot(
+      {
+        isGlobal:true,
+        cache: true,
+        validate
+      }),
   ],
 })
 export class AppModule {}
