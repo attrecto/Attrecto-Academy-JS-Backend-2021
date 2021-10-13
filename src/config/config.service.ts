@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
+import { IsEnum, IsString, validateSync } from 'class-validator';
 
 @Injectable()
 export class ConfigService {}
-import { plainToClass } from 'class-transformer';
-import { IsEnum, IsString, validateSync } from 'class-validator';
 
 enum Environment {
   Development = "development",
   Production = "production",
   Local = "local",
-  Provision = "provision",
 }
 
 class EnvironmentVariables {

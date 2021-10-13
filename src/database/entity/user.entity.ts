@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { CourseEntity } from './course.entity';
 
 @Entity({ name: 'user' })
@@ -16,8 +16,8 @@ export class UserEntity {
   @Column({ name: 'password', type: 'varchar', select: false })
   password: string;
 
-  @OneToOne(() => CourseEntity, {cascade: true})
-  course: CourseEntity
+  @OneToMany(() => CourseEntity, course => course.author)
+  course: CourseEntity[]
 
   @ManyToMany(() => CourseEntity)
   @JoinTable({

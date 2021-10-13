@@ -6,14 +6,20 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { AuthController } from './auth.controller';
 import { TokenStrategy } from './strategies/token.strategy';
 import { AuthService } from './auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     UsersModule,
-    JwtModule.register({
-      secret: 'SuperSecret',
-      signOptions: {
-        expiresIn: '1w',
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory(configService: ConfigService) {
+        return {
+          secret: configService.get('JWT_SECRET'),
+          signOptions: {
+            expiresIn: '1w',
+          },
+        };
       },
     }),
   ],

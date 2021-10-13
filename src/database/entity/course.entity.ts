@@ -1,5 +1,5 @@
 import { type } from 'os';
-import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 
 @Entity({ name: 'course' })
@@ -13,8 +13,8 @@ export class CourseEntity {
   @Column({ name: 'description', type: 'varchar' })
   description: string;
 
-  @OneToOne(() => UserEntity)
-  @JoinColumn()
+  @ManyToOne(() => UserEntity)
+  @JoinColumn({name:'author_id'})
   author: UserEntity;
 
   @Column({ name: 'url', type: 'varchar' })
