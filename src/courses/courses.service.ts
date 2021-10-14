@@ -28,7 +28,6 @@ export class CoursesService {
 
   modify(id: number, course: CourseDto) {
     course.id = id;
-    console.log(course);
     return this.coursesRepository.save(course);
   }
 
