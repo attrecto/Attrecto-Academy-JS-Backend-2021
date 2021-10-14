@@ -1,5 +1,12 @@
-import { type } from 'os';
-import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserEntity } from './user.entity';
 
 @Entity({ name: 'course' })
@@ -14,7 +21,7 @@ export class CourseEntity {
   description: string;
 
   @ManyToOne(() => UserEntity)
-  @JoinColumn({name:'author_id'})
+  @JoinColumn({ name: 'author_id' })
   author: UserEntity;
 
   @Column({ name: 'url', type: 'varchar' })
@@ -22,10 +29,9 @@ export class CourseEntity {
 
   @ManyToMany(() => UserEntity)
   @JoinTable({
-      name: 'course_users',
-      joinColumns: [{ name: 'course_id' }],
-      inverseJoinColumns: [{ name: 'user_id' }],
+    name: 'course_users',
+    joinColumns: [{ name: 'course_id' }],
+    inverseJoinColumns: [{ name: 'user_id' }],
   })
   students: UserEntity[];
-
 }

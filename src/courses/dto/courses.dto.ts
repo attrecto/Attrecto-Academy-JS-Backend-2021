@@ -1,6 +1,14 @@
 import { Type } from 'class-transformer';
-import {IsArray, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
-import { UpdateUserDto } from 'src/users/dto/user.dto';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUrl,
+  ValidateNested,
+} from 'class-validator';
+import { UpdateUserDto } from '../../users/dto/user.dto';
+
 export class CourseDto {
   id: number;
 
@@ -13,12 +21,14 @@ export class CourseDto {
   @IsUrl()
   url: string;
 
-  @IsOptional()
   @Type(() => UpdateUserDto)
+  @ValidateNested({ each: true })
+  @IsOptional()
   author: UpdateUserDto;
 
   @Type(() => UpdateUserDto)
   @IsArray()
+  @ValidateNested({ each: true })
   @IsOptional()
   students: UpdateUserDto[];
 }

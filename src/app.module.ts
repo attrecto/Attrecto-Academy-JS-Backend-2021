@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as path from 'path';
-
+import { ConfigModule } from '@nestjs/config';
 import { CoursesModule } from './courses/courses.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
-import { validate } from './config/config.service';
+import { validate } from './config/validation';
 
 @Module({
   imports: [
@@ -20,12 +19,11 @@ import { validate } from './config/config.service';
     CoursesModule,
     UsersModule,
     AuthModule,
-    ConfigModule.forRoot(
-      {
-        isGlobal:true,
-        cache: true,
-        validate
-      }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      validate,
+    }),
   ],
 })
 export class AppModule {}
