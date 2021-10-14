@@ -1,8 +1,9 @@
 import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsNumber,
+  IsInt,
   IsOptional,
+  IsPositive,
   IsString,
   IsUrl,
   ValidateNested,
@@ -34,6 +35,7 @@ export class CourseDto {
 }
 
 export class AssignCourseDto {
-  @IsNumber()
+  @IsInt()
+  @IsPositive()
   id: number;
 }
