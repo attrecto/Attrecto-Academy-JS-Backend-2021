@@ -23,13 +23,11 @@ export class CourseDto {
   url: string;
 
   @Type(() => UpdateUserDto)
-  @ValidateNested({ each: true })
   @IsOptional()
   author: UpdateUserDto;
 
   @Type(() => UpdateUserDto)
   @IsArray()
-  @ValidateNested({ each: true })
   @IsOptional()
   students: UpdateUserDto[];
 }
