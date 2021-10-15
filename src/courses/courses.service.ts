@@ -13,20 +13,21 @@ export class CoursesService {
   ) {}
 
   getAll() {
-    return this.coursesRepository.find();
+    return this.coursesRepository.find({ relations: ['author', 'students'] });
   }
 
   getOne(id: number) {
-    return this.coursesRepository.findOne(id);
+    return this.coursesRepository.findOne(id, {
+      relations: ['author', 'students'],
+    });
   }
 
-  create(course: CourseDto) {
+  async create(course: CourseDto) {
     return this.coursesRepository.save(course);
   }
 
   modify(id: number, course: CourseDto) {
     course.id = id;
-
     return this.coursesRepository.save(course);
   }
 
