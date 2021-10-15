@@ -31,7 +31,6 @@ export class UpdateUserDto {
 
   @Type(() => AssignCourseDto)
   @IsArray()
-  @ValidateNested({ each: true })
   @IsOptional()
   courses: AssignCourseDto[];
 }
