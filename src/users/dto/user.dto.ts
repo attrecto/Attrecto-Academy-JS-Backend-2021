@@ -6,7 +6,6 @@ import {
   IsOptional,
   IsString,
   MinLength,
-  ValidateNested,
 } from 'class-validator';
 import { AssignCourseDto } from '../../courses/dto/courses.dto';
 

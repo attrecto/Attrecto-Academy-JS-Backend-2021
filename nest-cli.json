@@ -4,5 +4,8 @@
   "generateOptions":
   {
     "spec": false
+  },
+  "compilerOptions": {
+    "plugins": ["@nestjs/swagger"]
   }
 }
