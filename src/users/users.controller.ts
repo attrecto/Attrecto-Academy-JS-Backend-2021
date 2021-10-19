@@ -17,7 +17,9 @@ import { Id } from '../common/id.decorator';
 import { TokenGuard } from '../auth/guards/token.guard';
 import { Role } from '../common/role-enum';
 import { RoleGuard } from '../auth/guards/role.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

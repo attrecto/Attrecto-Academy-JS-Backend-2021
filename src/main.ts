@@ -22,6 +22,7 @@ async function bootstrap() {
     .setTitle('Attrecto Academy 2021 API')
     .setDescription('The Attrecto Academy 2021 API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const options: SwaggerDocumentOptions = {
