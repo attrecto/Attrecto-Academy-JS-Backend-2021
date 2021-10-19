@@ -8,6 +8,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
+import { Role } from '../../common/role-enum';
 import { AssignCourseDto } from '../../courses/dto/courses.dto';
 
 export class CreateUserDto {
@@ -21,8 +22,8 @@ export class CreateUserDto {
   @MinLength(8)
   password: string;
 
-  @IsString()
-  role: string;
+  @IsEnum(Role)
+  role: Role;
 }
 
 export class UpdateUserDto {

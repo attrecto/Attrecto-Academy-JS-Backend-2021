@@ -11,15 +11,15 @@ import {
 } from '@nestjs/common';
 
 import { Request } from 'express';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { Id } from '../common/id.decorator';
 import { TokenGuard } from '../auth/guards/token.guard';
 import { Role } from '../common/role-enum';
 import { RoleGuard } from '../auth/guards/role.guard';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { UserEntity } from '../database/entity/user.entity';
 
-@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -30,18 +30,22 @@ export class UsersController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @UseGuards(TokenGuard, RoleGuard([Role.ADMIN]))
   async findAll() {
     return this.usersService.findAll();
   }
 
   @Get('me')
+  @ApiBearerAuth()
   @UseGuards(TokenGuard, RoleGuard([Role.ADMIN, Role.USER]))
   async getProfile(@Req() request: Request) {
-    return request.user;
+    const user = request.user as UserEntity;
+    return this.usersService.findOne(user.id);
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @UseGuards(TokenGuard, RoleGuard([Role.ADMIN]))
   async findOne(@Id() id: number) {
     const user = await this.usersService.findOne(id);
@@ -54,6 +58,7 @@ export class UsersController {
   }
 
   @Put(':id')
+  @ApiBearerAuth()
   @UseGuards(TokenGuard)
   async update(@Id() id: number, @Body() data: UpdateUserDto) {
     const user = await this.usersService.findOne(id);
@@ -66,6 +71,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @UseGuards(TokenGuard)
   async remove(@Id() id: number) {
     const user = await this.usersService.findOne(id);
