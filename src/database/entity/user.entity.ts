@@ -1,3 +1,4 @@
+import { Role } from 'src/common/role-enum';
 import {
   Column,
   Entity,
@@ -23,6 +24,9 @@ export class UserEntity {
 
   @Column({ name: 'password', type: 'varchar', select: false })
   password: string;
+
+  @Column({ name: 'role', type: 'varchar', nullable: true })
+  role: string;
 
   @OneToMany(() => CourseEntity, (course) => course.author)
   course: CourseEntity[];

@@ -7,14 +7,19 @@ import {
   NotFoundException,
   Put,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 
+import { Request } from 'express';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { Id } from '../common/id.decorator';
-import { TokenGuard } from 'src/auth/guards/token.guard';
+import { TokenGuard } from '../auth/guards/token.guard';
+import { Role } from '../common/role-enum';
+import { RoleGuard } from '../auth/guards/role.guard';
 
 @Controller('users')
+@UseGuards(TokenGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -24,13 +29,19 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(TokenGuard)
+  @UseGuards(RoleGuard([Role.ADMIN]))
   async findAll() {
     return this.usersService.findAll();
   }
 
+  @Get('me')
+  @UseGuards(RoleGuard([Role.ADMIN, Role.USER]))
+  async getProfile(@Req() request: Request) {
+    return request.user;
+  }
+
   @Get(':id')
-  @UseGuards(TokenGuard)
+  @UseGuards(RoleGuard([Role.ADMIN]))
   async findOne(@Id() id: number) {
     const user = await this.usersService.findOne(id);
 
@@ -42,7 +53,6 @@ export class UsersController {
   }
 
   @Put(':id')
-  @UseGuards(TokenGuard)
   async update(@Id() id: number, @Body() data: UpdateUserDto) {
     const user = await this.usersService.findOne(id);
 
@@ -54,7 +64,6 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseGuards(TokenGuard)
   async remove(@Id() id: number) {
     const user = await this.usersService.findOne(id);
 
