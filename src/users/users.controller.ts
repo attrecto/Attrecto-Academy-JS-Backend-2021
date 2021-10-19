@@ -19,7 +19,6 @@ import { Role } from '../common/role-enum';
 import { RoleGuard } from '../auth/guards/role.guard';
 
 @Controller('users')
-@UseGuards(TokenGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -29,19 +28,19 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(RoleGuard([Role.ADMIN]))
+  @UseGuards(TokenGuard, RoleGuard([Role.ADMIN]))
   async findAll() {
     return this.usersService.findAll();
   }
 
   @Get('me')
-  @UseGuards(RoleGuard([Role.ADMIN, Role.USER]))
+  @UseGuards(TokenGuard, RoleGuard([Role.ADMIN, Role.USER]))
   async getProfile(@Req() request: Request) {
     return request.user;
   }
 
   @Get(':id')
-  @UseGuards(RoleGuard([Role.ADMIN]))
+  @UseGuards(TokenGuard, RoleGuard([Role.ADMIN]))
   async findOne(@Id() id: number) {
     const user = await this.usersService.findOne(id);
 
@@ -53,6 +52,7 @@ export class UsersController {
   }
 
   @Put(':id')
+  @UseGuards(TokenGuard)
   async update(@Id() id: number, @Body() data: UpdateUserDto) {
     const user = await this.usersService.findOne(id);
 
@@ -64,6 +64,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(TokenGuard)
   async remove(@Id() id: number) {
     const user = await this.usersService.findOne(id);
 
