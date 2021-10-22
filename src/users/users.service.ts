@@ -34,7 +34,7 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    return this.usersRepository.findOne(id);
+    return this.usersRepository.findOne(id, { relations: ['courses'] });
   }
 
   async update(id: number, data: UpdateUserDto) {

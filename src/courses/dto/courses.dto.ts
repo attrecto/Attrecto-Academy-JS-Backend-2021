@@ -6,7 +6,6 @@ import {
   IsPositive,
   IsString,
   IsUrl,
-  ValidateNested,
 } from 'class-validator';
 import { UpdateUserDto } from '../../users/dto/user.dto';
 
